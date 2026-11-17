@@ -1,0 +1,251 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Финансовый дашборд проекта</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{--g:#1a7f4b;--y:#d99a00;--r:#c62828;--b:#1f4e8c;--bg:#f4f6f9;--t:#1b2430;--m:#5b6676}
+*{box-sizing:border-box}body{margin:0;font:17px/1.45 system-ui,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--t)}
+header{background:var(--b);color:#fff;padding:12px 20px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}header h1{font-size:20px;margin:0 auto 0 0}
+button,select{font:inherit;padding:7px 12px;border-radius:8px;border:1px solid #b9c3d3;background:#fff;cursor:pointer}
+header button{background:#ffffff1f;color:#fff;border-color:#ffffff66;font-size:14px}
+.bar{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid #d5dbe5;padding:8px 20px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;font-size:14px}
+.bar label{display:flex;flex-direction:column;min-width:125px}.bar button.on{background:var(--b);color:#fff}
+nav{display:flex;flex-wrap:wrap;gap:6px;padding:10px 20px 0}nav button{border-radius:8px 8px 0 0;font-weight:600}nav button.on{background:var(--b);color:#fff}
+main{padding:12px 20px 40px;max-width:1280px;margin:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:12px 0}
+.k{background:#fff;border-radius:12px;padding:12px 14px;border-left:8px solid var(--g);box-shadow:0 1px 3px #0001}.k.y{border-color:var(--y)}.k.r{border-color:var(--r)}
+.k .t{color:var(--m);font-size:14px}.k .v{font-size:28px;font-weight:700}.k .n{font-size:13px;color:var(--m)}
+.hero{font-size:22px;font-weight:700;padding:16px 18px;border-radius:12px;color:#fff;background:var(--g)}.hero.r{background:var(--r)}.hero.y{background:var(--y)}
+.f{display:inline-block;margin-left:6px;width:18px;height:18px;line-height:18px;text-align:center;border-radius:50%;background:#e3e9f3;color:var(--b);font-size:12px;cursor:help;position:relative}
+.f:hover::after,.f:focus::after{content:attr(data-t);position:absolute;left:0;top:22px;width:270px;background:#1b2430;color:#fff;padding:8px;border-radius:8px;font-size:13px;z-index:9;text-align:left;font-weight:400}
+.card{background:#fff;border-radius:12px;padding:14px;margin:12px 0;box-shadow:0 1px 3px #0001;overflow-x:auto}h3{margin:4px 0 8px;font-size:19px}
+.c{position:relative;height:300px}.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:12px}
+table{border-collapse:collapse;width:100%;font-size:15px}td,th{border-bottom:1px solid #e3e8ef;padding:6px 8px;text-align:left;vertical-align:top}th{background:#eef2f8}
+input[type=number],input[type=text],textarea{font:inherit;padding:5px 8px;border:1px solid #b9c3d3;border-radius:6px;width:100%}input[type=number]{max-width:140px}
+.tg{color:var(--g);font-weight:700}.tr{color:var(--r);font-weight:700}.ty{color:var(--y);font-weight:700}.sig{font-style:italic;color:var(--m)}
+
+:root{--g:#3ddc84;--y:#f2b83c;--r:#ff5c5c;--b:#16241c;--bg:#0c110e;--t:#e6eee8;--m:#93a39a}
+.bar,.card,.k,nav button,button,select{background:#161d19;color:var(--t);border-color:#2a332e}.k{box-shadow:none}.card{box-shadow:none;border:1px solid #26302b}
+header{background:#101a14;border-bottom:1px solid #2a332e}header button{color:var(--g);border-color:var(--g);background:transparent}
+.bar button.on,nav button.on{background:var(--g);color:#06140c;border-color:var(--g)}th{background:#1d2622;color:var(--t)}td,th{border-color:#26302b}
+input,textarea,select{background:#0f1512;color:var(--t);border:1px solid #33403a;border-radius:6px}input[type=range]{accent-color:var(--g)}
+.f{background:#26302b;color:var(--g)}.hero{color:#06140c}.dec{display:flex;gap:6px;margin-top:8px}.dec button.on{background:var(--g);color:#06140c}
+:root{--a:#e91e8c;--g:#1a9e5c;--y:#e59a00;--r:#d92b3a;--b:#e91e8c;--bg:#fff6dc;--t:#3a2230;--m:#8a6b78}
+body{background:linear-gradient(180deg,#fff6dc,#ffe9f3 60%,#fff6dc) fixed}
+header{background:linear-gradient(90deg,#ffd54f,#ff7eb6);color:#3a2230;border:0}header button{background:#ffffffb3;color:#3a2230;border-color:#3a223055}
+.bar,.card,.k,button,select{background:#fff;color:var(--t);border-color:#f3cfe0}.card{border:1px solid #f3cfe0}.k{box-shadow:0 1px 4px #e91e8c14}
+nav button{background:#fff;color:var(--t)}.bar button.on,nav button.on,.dec button.on{background:var(--a);color:#fff;border-color:var(--a)}
+th{background:#ffe9f3;color:var(--t)}td,th{border-color:#f6dce8}input,textarea,select{background:#fff;color:var(--t);border:1px solid #efbfd6}
+input[type=range]{accent-color:var(--a)}.f{background:#ffe3ef;color:var(--a)}.hero{color:#fff}
+</style></head><body>
+<header><h1>Финансовый дашборд проекта</h1>
+<button data-a="load">Загрузить данные</button><button data-a="save">Сохранить данные</button><button data-a="tpl">Скачать шаблон факта</button><button data-a="fact">Загрузить факт</button><button data-a="ex">Загрузить пример</button><button data-a="clr">Очистить</button></header>
+<input type="file" id="f1" accept=".xlsx,.xls,.json" hidden><input type="file" id="f2" accept=".xlsx,.xls,.csv" hidden>
+<div class="bar"><span><button data-sc="pess">Пессимистичный</button> <button data-sc="base">Базовый</button> <button data-sc="opt">Оптимистичный</button></span>
+<label>Налоговый режим<select data-k="mode"><option value="usn">Упрощёнка</option><option value="our">ОУР (ИПН)</option></select></label>
+<label>Цена: <b id="vp"></b><input type="range" data-sl="p" min="-30" max="30" step="1"></label>
+<label>Продажи: <b id="vs"></b><input type="range" data-sl="s" min="-50" max="50" step="1"></label>
+<label>Аренда/OPEX: <b id="vx"></b><input type="range" data-sl="x" min="-30" max="100" step="5"></label>
+<label>Ставка налога: <b id="vt"></b><input type="range" data-sl="t" min="0" max="15" step="0.5"></label>
+<button data-a="rst">Сбросить «что если»</button></div>
+<nav id="nav"></nav><main id="pane"></main>
+<script>
+const MRP=4325,G='#1a9e5c',Y='#e59a00',R='#d92b3a',B='#e91e8c',$=s=>document.querySelector(s),clone=o=>JSON.parse(JSON.stringify(o));
+const fmt=(n,d=0)=>isFinite(n)?(+n).toLocaleString('ru-RU',{maximumFractionDigits:d}):'—',T=(n,u='тг')=>fmt(n)+' '+u,P=n=>fmt(n*100,1)+' %';
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const L=a=>a.map(([n,q,p,s])=>({n,q,p,s}));
+const SRC={tax:'kgd.gov.kz, ставка Алматы 2026',ip:'Взносы ИП при доходе на уровне МЗП 85 000',coef:'ОПВР+ООСМС+СО ≈ 11%',days:'График работы',price:'Цены конкурентов + интервью, дата',upp:'Интервью, наблюдение у конкурента',flow:'Наблюдение за Instagram конкурентов',conv:'Допущение команды (позже — тест продаж)',onl:'50 × 2% × 30, оценка',lflow:'40% от среднего, оценка',lonl:'40% от среднего, оценка',best:'Сезон: праздники',cap:'Мин. партия поставщика и бюджет',disc:'Правило курса',rep:'Допущение команды, уточнить после пилота (позже — данные CRM)',sp:'Правило курса',pp:'Правило курса',so:'Правило курса',po:'Правило курса',mon:'Обычно 3 мес',res:'Минимум 10% по курсу'};
+const EX=()=>({mode:'usn',tax:.04,ipn:.1,coef:1.11,ip:21675,days:30,price:6000,upp:1,flow:50,conv:.02,onl:30,lflow:20,lonl:12,best:150,cap:200,disc:.1,ppc:1,rep:0,m0:1,peak:12,adOn:.7,ret:.05,decs:{},okr:{goal:'Выйти в плюс к 3-му месяцу',kr:[{n:'Продажи в месяц, шт',t:60,k:'min',f:''},{n:'Прибыль месяца, тг',t:75000,k:'min',f:''},{n:'CAC, тг',t:300,k:'max',f:''}]},sp:-.3,pp:-.1,so:.2,po:.05,mon:3,res:.1,
+cost:L([['Закупка или материалы',1,1215,'Прайс поставщика (Pinduoduo), ссылка'],['Доставка до вас',1,700,'Тариф перевозчика'],['Упаковка',1,200,'oe.kz, прайс упаковки'],['Брак, бой, списание',1,120,'Оценка команды: 10% от закупки']]),
+emp:L([['Продавец',1,85000,'hh.kz, вакансии Алматы'],['SMM и контент',1,0,'hh.kz'],['Закупки и упаковка',1,0,'hh.kz']]),
+opex:L([['Аренда',1,0,'krisha.kz'],['Маркетинг (реклама)',1,10000,'План рекламы'],['Сайт, связь, программы',1,5000,'Тарифы операторов'],['Бухгалтер',1,0,'Аутсорс'],['Прочее',1,5000,'Оценка команды']]),
+capex:L([['Оборудование, мебель, витрина',1,20000,'Коммерческое предложение'],['Первая закупка товара',100,1215,'100 шт × цена закупки'],['Фото и оформление',1,0,''],['Депозит за аренду',1,0,''],['Регистрация, вывеска',1,0,''],['Сайт, Instagram',1,0,'']]),
+src:{...SRC},fact:{},why:'Упрощённая декларация: доход проекта далеко ниже лимита 600 000 МРП, налог считается просто (процент от выручки); ставка Алматы 2026 — 3%.',dec:'',
+kpi:[{n:'Продажи в месяц, шт',t:'60 шт',d:'3-й месяц работы',o:'Продавец',q:'Доля брака и возвратов ≤ 5%'},{n:'Прибыль месяца, тг',t:'≥ 75 000 тг',d:'3-й месяц работы',o:'Руководитель проекта',q:'Запас прочности ≥ 15%'},{n:'Конверсия в покупку',t:'2%',d:'2-й месяц работы',o:'SMM-менеджер',q:'CAC ≤ 1/3 LTV'}]});
+const START=()=>{const e=EX();e.tax=.03;return e};
+const BLANK=()=>Object.assign(EX(),{price:0,flow:0,conv:0,onl:0,lflow:0,lonl:0,best:0,cap:0,tax:.03,cost:L([['Статья себестоимости',1,0,'']]),emp:L([['Сотрудник',1,0,'']]),opex:L([['Аренда',1,0,''],['Маркетинг (реклама)',1,0,'']]),capex:L([['Статья CAPEX',1,0,'']]),src:{},fact:{},kpi:[]});
+let p=START(),sl={p:0,s:0,x:0,t:null},sc='base',tab='main',post=[],cs={};
+Chart.defaults.color='#3a2230';Chart.defaults.borderColor='#f3dbe6';
+const S=a=>a.reduce((s,x)=>s+(+x.q||0)*(+x.p||0),0),PPC=()=>1+(+p.rep||0);
+function calc(p,o){const our=p.mode=='our',rate=o.tx??(our?p.ipn:p.tax),cost=S(p.cost),price=p.price*(1+o.dp),tax=our?0:price*rate,m=price-cost-tax;
+const emp=S(p.emp)*p.coef,opex=(emp+S(p.opex)+p.ip)*(1+o.dx),capex=S(p.capex);
+const sales=Math.round(Math.round(p.flow*p.conv*p.upp*p.days+p.onl)*(1+o.ds)),launch=Math.round(Math.round(p.lflow*p.conv*p.upp*p.days+p.lonl)*(1+o.ds)),best=Math.min(Math.round(p.best*(1+o.ds)),p.cap);
+const ir=o.tx??(our&&sales*price*12>230000*MRP?.15:p.ipn),pr=n=>{const x=n*m-opex;return our&&x>0?x*(1-ir):x};
+const be0=m>0?opex/m:Infinity,be=m>0?Math.ceil(be0-1e-9):Infinity,lp=pr(launch),pd=price*(1-p.disc),md=pd-cost-(our?0:pd*rate);
+return{pr,cost,price,tax,m,emp,opex,capex,sales,launch,best,lp,ap:pr(sales),bp:pr(best),be0,be,day:Math.ceil(be/p.days),chk:Math.ceil(be/p.upp),rev:be*price,
+safe:m<=0?-1:sales>0?Math.trunc((sales-be0)/sales*100)/100:0,cshare:be/p.cap,load:sales/p.cap,nmark:(price-cost)/cost,mrg:(price-cost)/price,pd,md,drop:(m-md)/m,need:md>0?Math.ceil(sales*m/md):NaN,money:capex+p.mon*Math.max(0,-lp)+p.res*capex,rate,our}}
+const scn=k=>k=='pess'?{s:p.sp,p:p.pp}:k=='opt'?{s:p.so,p:p.po}:{s:0,p:0};
+const O=k=>({ds:(1+scn(k).s)*(1+sl.s)-1,dp:(1+scn(k).p)*(1+sl.p)-1,dx:sl.x,tx:sl.t??undefined});
+const NM={pess:'Пессимистичный',base:'Базовый',opt:'Оптимистичный'};
+const K=(t,v,n,s,f)=>`<div class="k ${s}"><div class="t">${t}<span class="f" tabindex="0" data-t="${esc(f+'. Источник: расчёт дашборда по вводным (вкладка «Данные»)')}">ƒ</span></div><div class="v">${v}</div><div class="n">${n}</div></div>`;
+const sg=n=>(n>0?'+':'')+T(n);
+function chart(id,type,data,opt={}){cs[id]?.destroy();cs[id]=new Chart($('#'+id),{type,data,options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:data.datasets.length>1||type=='doughnut',labels:{font:{size:14}}}},...opt}})}
+const cv=id=>`<div class="c"><canvas id="${id}"></canvas></div>`;
+let fl={a:1,b:12,ch:'all'};
+const MN=['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'],sh=(on,f)=>{const t=f*p.conv*p.upp*p.days+on;return t>0?on/t:0},mkOf=o=>S(p.opex.filter(x=>/маркет|реклам/i.test(x.n)))*(1+o.dx);
+function mon(o){const n=calc(p,o);return[...Array(12)].map((_,i)=>{const cal=(p.m0-1+i)%12,u=i==0?n.launch:cal==p.peak-1?n.best:i==1?Math.round((n.launch+n.sales)/2):n.sales,on=Math.round(u*(i==0?sh(p.lonl,p.lflow):sh(p.onl,p.flow)));return{i,name:MN[cal],u,on,off:u-on,view:(i==0?p.lflow:p.flow)*p.days*(1+o.ds)}})}
+function agg(o){const n=calc(p,o),mk=mkOf(o),lo=Math.min(fl.a,fl.b),hi=Math.max(fl.a,fl.b),sel=x=>fl.ch=='on'?x.on:fl.ch=='off'?x.off:x.u,k=fl.ch=='on'?p.adOn:fl.ch=='off'?1-p.adOn:1;
+const rows=mon(o).filter(x=>x.i+1>=lo&&x.i+1<=hi).map(x=>{const u=sel(x),rev=u*n.price,dir=u*n.cost,ad=mk*k;return{...x,u,rev,dir,ad,aft:rev-dir-ad,pf:n.pr(x.u)}}),T=f=>rows.reduce((s,x)=>s+x[f],0);
+return{rows,rev:T('rev'),u:T('u'),dir:T('dir'),ad:T('ad'),pf:T('pf')}}
+function okr(){const q=p.okr;return`<div class="card"><h3>OKR на квартал</h3><input type="text" data-k="okr.goal" value="${esc(q.goal)}">${q.kr.map((x,i)=>{const f=x.f===''||x.f==null?null:+x.f,pc=f==null?0:x.k=='min'?f/x.t:x.t/f,c=pc>=1?G:pc>=.8?Y:R;return`<p><b>KR${i+1}. ${esc(x.n)}, ${x.k=='min'?'не меньше':'не больше'}</b> <input type="number" style="max-width:110px" data-k="okr.kr.${i}.t" value="${x.t}"> · Факт: <input type="number" style="max-width:110px" data-k="okr.kr.${i}.f" value="${x.f??''}"> ${f==null?'<span class="sig">нет факта</span>':'выполнено '+fmt(Math.min(pc,9)*100)+' %'}</p><div style="background:#f3dbe6;border-radius:6px;height:10px"><div style="width:${Math.min(pc,1)*100}%;height:10px;border-radius:6px;background:${c}"></div></div>`}).join('')}</div>`}
+const V={
+main(){const o=O(sc),n=calc(p,o),A=calc(p,O('pess')),ok=n.ap>=0,hc=!ok?'r':n.safe<.15?'y':'g',rev=n.sales*n.price,dir=n.sales*n.cost,ad=mkOf(o),pu=n.sales/p.upp,cl=pu/PPC(),cac=ad/cl,chk=rev/pu,mg=(rev-dir)/rev,ltv=n.m*p.upp*PPC(),lc=ltv/cac,aft=rev-dir-ad,ls=v=>!isFinite(v)||v>=3?'g':v>=1?'y':'r',
+wage=n.emp*(1+o.dx),pt=[['Закупка и затраты на единицу',n.cost*n.sales,'#1f6b47'],['Налог',n.tax*n.sales,Y],['Зарплата с взносами',wage,'#4f7fbf'],['Реклама',ad,'#7d8a82'],['Прочие постоянные',Math.max(0,n.opex-wage-ad),'#5b6676']],rest=rev-pt.reduce((s,x)=>s+x[1],0);pt.push(['Остаток (до ИПН)',rest,rest<0?R:G]);
+post.push(()=>{chart('c1','bar',{labels:['Запуск','Средний месяц','Лучший месяц'],datasets:[{label:'Прибыль, тг',data:[n.lp,n.ap,n.bp],backgroundColor:[n.lp,n.ap,n.bp].map(v=>v<0?R:G)}]});
+chart('c3','bar',{labels:pt.map(x=>x[0]),datasets:[{data:pt.map(x=>x[1]/rev*100),backgroundColor:pt.map(x=>x[2])}]},{indexAxis:'y'})});
+const fr=(l,pl,fa,u)=>fa?`<tr><td>${l}</td><td>${fmt(pl,1)} ${u}</td><td>${fmt(fa,1)} ${u}</td><td class="${pl&&Math.abs(fa/pl-1)>.2?'tr':'tg'}">${pl?fmt((fa/pl-1)*100)+' %':'—'}</td></tr>`:'',f=p.fact,fa=fr('Продажи пилота',n.sales,f.sales,'шт')+fr('Предзаказы (к продажам запуска)',n.launch,f.pre,'шт')+fr('Опрос: доля готовых купить',p.conv*100,f.survey,'%')+fr('Цена конкурентов (к нашей цене)',p.price,f.comp,'тг');
+const sc3=[[`Запас прочности ${P(n.safe)} (норма от 15%)`,n.safe>=.15?'продажи могут просесть без убытка':'малая ошибка в прогнозе даёт убыток',n.safe>=.15?'цену не менять, сверять продажи пилота с планом':'поднять цену или сократить постоянные расходы'],
+[`Пессимистичный сценарий: ${sg(A.ap)} в месяц`,A.ap>=0?'даже в худшем случае есть прибыль':'в худшем случае проект теряет деньги',`заложить резерв ${T(A.money)} вместо ${T(n.money)}`],
+[`Скидка ${P(p.disc)} снижает маржинальную прибыль на ${P(n.drop)}`,isFinite(n.need)?`нужно продавать ${fmt(n.need)} шт вместо ${fmt(n.sales)} (+${P(n.need/n.sales-1)})`:'скидка убыточна','не давать скидки без гарантированного роста продаж']];
+const dn=Object.values(p.decs).filter(v=>v=='ok').length,MX=['price','upp','flow','conv','onl','lflow','lonl','best','cap','tax','ip','coef','days'],items=[].concat(p.cost,p.emp,p.opex,p.capex).filter(x=>+x.p>0),dre=/\d{2}\.\d{2}|20\d\d/,nd=MX.filter(k=>!dre.test(p.src[k]||'')).length+items.filter(x=>!dre.test(x.s||'')).length,tot=MX.length+items.length,yr=rev*12,neg=Object.values(p).some(v=>typeof v=='number'&&v<0);
+const qc=[[nd==0,`Источник и дата у каждого вводного${nd?': не хватает даты у '+nd+' из '+tot:''}`],[n.price>n.cost,'Цена выше себестоимости'],[n.sales<=p.cap&&n.best<=p.cap,'Продажи не больше мощности'],[n.be<=p.cap,'Точка безубыточности не выше мощности'],[yr<=600000*MRP||n.our,'Годовая выручка не выше лимита упрощёнки (600 000 МРП)'],[!neg,'Нет отрицательных вводных']];
+return`<div class="hero ${hc}">${ok?'Выходим в плюс':'Теряем деньги'}: ${sg(n.ap)} в средний месяц · безубыточность ${fmt(n.be)} шт при плане ${fmt(n.sales)} шт · на старт нужно ${T(n.money)}${sc!='base'?' · сценарий: '+NM[sc]:''}</div>
+<p class="sig">Все цифры — план на средний месяц из ваших вводных. Фактических продаж, возвратов и расходов на рекламу пока нет.</p>
+<div class="grid">${K('Выручка',T(rev),'план, средний месяц','g','Продажи × Цена')}
+${K('Новые клиенты',fmt(cl)+' чел','= число оплат','g','Оплаты ÷ Покупок на клиента; оплаты = Продажи ÷ Единиц в покупке')}
+${K('Конверсия',P(p.conv),'допущение команды, позже — тест','g','Покупатели ÷ увидевшие предложение')}
+${K('CAC',T(cac),'Реклама ÷ Новые клиенты',ls(lc),'Расход на рекламу ÷ Новые клиенты')}
+${K('Средний чек',T(chk),'Выручка ÷ Оплаты','g','Выручка ÷ Число покупок')}
+${K('Маржа',P(mg),'до налога и постоянных расходов',mg>=.3?'g':'y','(Выручка − Прямые затраты) ÷ Выручка')}
+${K('Покупок на клиента',fmt(PPC(),1)+' раз','метрика: 1 + доля повторных','y','Покупки ÷ Клиенты = 1 + доля клиентов, купивших повторно (вводное на вкладке «Данные»)')}
+${K('LTV',T(ltv),'предварительно: зависит от допущения','y','Маржинальная прибыль × Единиц в покупке × Покупок на клиента')}
+${K('LTV / CAC',isFinite(lc)?fmt(lc,1):'—','хорошо от 3, убыток ниже 1',ls(lc),'LTV ÷ CAC')}
+${K('После рекламы',sg(aft),'Выручка − затраты − реклама',aft>=0?'g':'r','Выручка − Прямые затраты − Реклама')}
+${K('Прибыль среднего месяца',sg(n.ap),'норма: больше 0 тг',ok?'g':'r','Продажи × Маржинальная − OPEX'+(n.our?'; на ОУР × (1 − ИПН), если > 0':''))}
+${K('Запас прочности',P(n.safe),'норма: от 15%',n.safe<0?'r':n.safe<.15?'y':'g','(Продажи − ТБ) ÷ Продажи')}</div>
+${yr>600000*MRP&&!n.our?`<div class="card tr">Годовая выручка ${T(yr)} выше лимита упрощёнки: нужен ОУР.</div>`:''}
+<div class="two"><div class="card"><h3>${n.lp<0&&n.ap>0?'Убыток запуска '+T(-n.lp)+' окупается: средний месяц даёт '+sg(n.ap):'Прибыль: '+sg(n.lp)+' / '+sg(n.ap)+' / '+sg(n.bp)}</h3>${cv('c1')}</div>
+<div class="card"><h3>С каждых 100 тг выручки ${rest>=0?'остаётся '+fmt(rest/rev*100,1)+' тг':'теряем '+fmt(-rest/rev*100,1)+' тг'}</h3>${cv('c3')}<p class="sig">Зелёный — остаток, красный — убыток, серый — реклама.</p></div></div>
+${fa?`<div class="card"><h3>Факт против плана</h3><table><tr><th>Показатель</th><th>План</th><th>Факт</th><th>Отклонение</th></tr>${fa}</table></div>`:''}
+<div class="card"><h3>Рекомендации от ИИ (число → вывод → действие)</h3><p class="ty">Решение принимаете вы. Это рекомендации, а не решения: эффект в карточках — оценка по допущениям, итог — за человеком.</p><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">${sc3.map((x,i)=>`<div class="k ${p.decs[i]=='ok'?'g':p.decs[i]=='no'?'r':'y'}"><div class="t">Совет ${i+1}</div><p><span class="sig">Число:</span> <b>${x[0]}</b></p><p><span class="sig">→ Вывод:</span> ${x[1]}</p><p><span class="sig">→ Действие:</span> ${x[2]}</p><div class="dec">${[['ok','Принимаю'],['talk','Обсудить'],['no','Отклоняю']].map(([v,l])=>`<button data-dec="${i}:${v}" class="${p.decs[i]==v?'on':''}">${l}</button>`).join('')}</div></div>`).join('')}</div>
+<p>Принято решений: <b>${dn} из ${sc3.length}</b></p><p><b>Решение команды:</b></p><textarea rows="3" data-k="dec" placeholder="Что команда решила и почему">${esc(p.dec)}</textarea><p class="sig">ИИ может рекомендовать, но итоговое решение всегда за человеком.</p></div>
+<div class="card"><h3>Качество данных</h3>${qc.map(x=>`<p class="${x[0]?'tg':'ty'}">${x[0]?'✓':'!'} ${x[1]}</p>`).join('')}</div>`},
+price(){const r=calc(p,O(sc)),N=Math.max(10,Math.ceil((isFinite(r.be)?r.be*1.8:p.cap)/10)*10),pts=[...Array(11)].map((_,i)=>Math.round(N*i/10)),k=1+sl.x,
+nm=['Персонал с взносами',...p.opex.map(x=>x.n),'Платежи ИП'],vl=[r.emp*k,...p.opex.map(x=>(+x.q||0)*(+x.p||0)*k),p.ip*k],mx=vl.indexOf(Math.max(...vl));
+post.push(()=>{chart('c2','scatter',{datasets:[{label:'Выручка, тг',data:pts.map(q=>({x:q,y:q*r.price})),borderColor:G,backgroundColor:G,showLine:true,pointRadius:2},{label:'Затраты, тг',data:pts.map(q=>({x:q,y:r.opex+q*(r.cost+r.tax)})),borderColor:R,backgroundColor:R,showLine:true,pointRadius:2},{label:'Точка безубыточности',data:isFinite(r.be)?[{x:r.be,y:r.be*r.price}]:[],backgroundColor:Y,borderColor:'#3a2230',pointRadius:9}]},{scales:{x:{title:{display:true,text:'Продажи, шт в месяц'}}}});
+chart('c3','doughnut',{labels:nm,datasets:[{data:vl,backgroundColor:['#e91e8c','#f06ab0','#f8a5d0','#ffd54f','#ffb300','#b0407a','#7a4a5e']}]})});
+return`<div class="grid">${K('Себестоимость единицы',T(r.cost),'без аренды и зарплат','g','Σ (количество × цена) статей себестоимости')}
+${K('Налог с одной продажи',T(r.tax),r.our?'ОУР: налог с прибыли месяца':'ставка '+P(r.rate),'g','Цена × ставка (упрощёнка). На ОУР 0: налог берётся с прибыли')}
+${K('Маржинальная прибыль',T(r.m),'на 1 единицу',r.m>0?'g':'r',r.our?'Цена − Себестоимость':'Цена − Себестоимость − Налог')}
+${K('Наценка / Маржа',P(r.nmark)+' / '+P(r.mrg),'Ц−С к С / Ц−С к Ц','g','(Цена−Себестоимость)÷Себестоимость / (Цена−Себестоимость)÷Цена')}
+${K('Точка безубыточности',fmt(r.be)+' шт','в день: '+fmt(r.day)+' · чеков: '+fmt(r.chk),r.be<=p.cap?'g':'r','OPEX ÷ Маржинальная прибыль, вверх')}
+${K('ТБ в деньгах',T(r.rev),'выручка, при которой прибыль = 0','g','ТБ в штуках × Цена')}
+${K('Доля мощности для нуля',P(r.cshare),r.be>p.cap?'точка выше мощности!':'мощности хватает',r.be>p.cap?'r':'g','ТБ ÷ Мощность')}</div>
+<div class="two"><div class="card"><h3>${r.m>0?`Выходим в ноль на ${fmt(r.be)} шт в месяц, выручка ${T(r.rev)}`:'Цена не покрывает переменные затраты: безубыточности нет'}</h3>${cv('c2')}</div>
+<div class="card"><h3>Крупнейшая постоянная статья: ${esc(nm[mx])} — ${P(vl[mx]/r.opex)} OPEX</h3>${cv('c3')}</div></div>`},
+three(){const r=calc(p,O(sc)),a=[['Запуск',r.launch,r.lp],['Средний месяц',r.sales,r.ap],['Лучший месяц',r.best,r.bp]];
+post.push(()=>chart('c4','bar',{labels:a.map(x=>x[0]),datasets:[{label:'Прибыль, тг',data:a.map(x=>x[2]),backgroundColor:a.map(x=>x[2]<0?R:G)}]}));
+return`<div class="grid">${a.map(x=>K('Прибыль: '+x[0].toLowerCase(),sg(x[2]),'продажи '+fmt(x[1])+' шт',x[2]>=0?'g':x[0]=='Запуск'?'y':'r','Продажи × Маржинальная прибыль − OPEX'+(r.our?' (на ОУР × (1 − ИПН), если > 0)':''))).join('')}</div>
+<div class="card"><h3>${r.lp<0?`Запуск уходит в минус на ${T(-r.lp)}, дальше `+(r.ap>=0?'средний месяц приносит '+sg(r.ap):'проект остаётся убыточным'):'Прибыль есть уже в месяц запуска: '+sg(r.lp)}</h3>${cv('c4')}
+<p>Месяцев раскачки: ${p.mon} → убыток до выхода в плюс ${T(p.mon*Math.max(0,-r.lp))}; резерв ${P(p.res)} от CAPEX = ${T(p.res*r.capex)}.</p></div>`},
+unit(){const r=calc(p,O(sc)),cl=r.sales/p.upp,mk=p.opex.filter(x=>/маркет|реклам/i.test(x.n)).reduce((s,x)=>s+(+x.q||0)*(+x.p||0),0)*(1+sl.x),cac=mk/cl,ltv=r.m*p.upp*PPC(),lc=ltv/cac;
+post.push(()=>chart('c5','bar',{labels:['1 единица'],datasets:[{label:'Себестоимость',data:[r.cost],backgroundColor:'#8fb0dc'},{label:'Налог',data:[r.tax],backgroundColor:Y},{label:'Остаётся (маржинальная)',data:[Math.max(r.m,0)],backgroundColor:G}]},{indexAxis:'y',scales:{x:{stacked:true},y:{stacked:true}}}));
+return`<div class="card"><h3>С каждой продажи остаётся ${T(r.m)} из ${T(r.price)} (${P(r.m/r.price)})</h3><div style="height:160px" class="c"><canvas id="c5"></canvas></div></div>
+<div class="grid">${K('Скидка '+P(p.disc),'цена '+T(r.pd),'маржинальная со скидкой: '+T(r.md),r.md>0?'y':'r','Цена × (1 − скидка); себестоимость не снижается')}
+${K('Падение маржинальной прибыли',P(r.drop),'норма: падает сильнее цены',r.drop>.3?'r':'y','(Было − Стало) ÷ Было')}
+${K('Продаж со скидкой для той же прибыли',fmt(r.need)+' шт','рост: '+P(r.need/r.sales-1),'y','Средний объём × Маржинальная до ÷ после скидки, вверх')}
+${K('Загрузка мощности',P(r.load),'норма: до 85%',r.load>1?'r':r.load>.85?'y':'g','Продажи ÷ Мощность')}
+${K('Маржа (лекция)',P(r.mrg),'доля цены после прямых затрат','g','(Выручка − Прямые затраты) ÷ Выручка')}
+${K('CAC',T(cac),'маркетинг ÷ новые клиенты ('+fmt(cl)+')','g','Расход на рекламу ÷ Новые клиенты (покупки в месяц)')}
+${K('LTV',T(ltv),'покупок на клиента: '+PPC(),'g','Маржинальная прибыль × Единиц в покупке × Покупок на клиента. Это лекционная «Чек × Покупки × Маржа», где маржинальная уже после себестоимости и налога')}
+${K('LTV / CAC',isFinite(lc)?fmt(lc,1):'—','норма: от 3, ниже 1 — убыток',lc>=3||!isFinite(lc)?'g':lc>=1?'y':'r','LTV ÷ CAC')}
+${K('После рекламы',sg(r.sales*r.price-r.sales*r.cost-mk),'в месяц','g','Выручка − Прямые затраты (себестоимость) − Реклама')}</div>
+<p class="sig">Доходимость и доля возвратов не считаются: для товара поштучно нет «начали/закончили»; возвраты учитывает строка «брак» в себестоимости.</p>`},
+scen(){const ks=['pess','base','opt'],A=ks.map(k=>calc(p,O(k))),sels=ks.map(k=>NM[k]);
+post.push(()=>chart('c6','bar',{labels:sels,datasets:[{label:'Прибыль среднего месяца, тг',data:A.map(x=>x.ap),backgroundColor:A.map(x=>x.ap<0?R:G)}]}));
+const row=(l,f)=>`<tr><td>${l}</td>${A.map(x=>`<td>${f(x)}</td>`).join('')}</tr>`;
+return`<div class="card"><h3>${A[0].ap<0?'Пессимистичный сценарий убыточен: '+sg(A[0].ap)+' в месяц, нужно '+T(A[0].money):'Даже пессимистичный сценарий в плюсе: '+sg(A[0].ap)}</h3>${cv('c6')}</div>
+<div class="card"><table><tr><th></th>${sels.map(s=>`<th>${s}</th>`).join('')}</tr>${row('Продажи в месяц',x=>fmt(x.sales)+' шт')}${row('Цена',x=>T(x.price))}${row('Маржинальная прибыль',x=>T(x.m))}${row('Точка безубыточности',x=>fmt(x.be)+' шт')}${row('Прибыль среднего месяца',x=>`<b class="${x.ap<0?'tr':'tg'}">${sg(x.ap)}</b>`)}${row('Загрузка мощности',x=>P(x.load))}${row('Потребность в деньгах',x=>T(x.money))}</table>
+<p>Изменения: пессимистичный ${P(p.sp)} продаж и ${P(p.pp)} цены; оптимистичный ${P(p.so)} и ${P(p.po)}. Меняются на вкладке «Данные».</p></div>`},
+kpi(){return`<div class="card"><h3>KPI команды (3–5 штук, SMART)</h3><table><tr><th>KPI</th><th>Цель</th><th>Срок</th><th>Ответственный</th><th>Метрика качества (закон Гудхарта)</th><th></th></tr>${p.kpi.map((k,i)=>`<tr>${['n','t','d','o','q'].map(f=>`<td><input type="text" data-k="kpi.${i}.${f}" value="${esc(k[f])}"></td>`).join('')}<td><button data-del="kpi.${i}">✕</button></td></tr>`).join('')}</table>${p.kpi.length<5?'<button data-add="kpi">+ добавить KPI</button>':''}
+<p><b>Показатель → метрика → KPI:</b> показатель — любое число; метрика — показатель + формула и регулярное сравнение; KPI — метрика + цель, срок и ответственный. Рядом с каждым KPI стоит метрика качества: число, ставшее целью, перестаёт быть честным.</p></div>${okr()}`}};
+const MAP=`Шаг 2 · Цена единицы|вводное|Цены конкурентов, интервью (см. поле «источник»)|Решение команды, из других чисел не получается
+Шаг 2 · Статьи себестоимости|вводное|Прайс поставщика, тариф, оценка (кол-во × цена)|Первичные данные с источником
+Налоговый режим и ставка|вводное|kgd.gov.kz; Алматы 2026: 3% (упрощёнка), ИПН 10% (ОУР)|Задаёт закон, не расчёт
+Шаг 2 · Единиц в покупке|вводное|Интервью, наблюдение у конкурента|Поведение клиента
+Шаг 2 · Себестоимость единицы|метрика|Σ (кол-во × цена) статей|Итог не вводится руками
+Шаг 2 · Налог с продажи|метрика|Цена × ставка (ОУР: 0)|Зависит от цены: цена поменялась — налог пересчитан
+Шаг 2 · Средний чек, Наценка, Маржа|метрика|Цена × Ед. в покупке; (Ц−С)÷С; (Ц−С)÷Ц|Считаются из цены и себестоимости
+Шаг 3 · Люди в день, доля покупающих, онлайн-продажи|вводное|Наблюдение, соцсети, допущение с расчётом|Продажи собраны из маленьких проверяемых шагов: убедительнее числа «из головы»
+Шаг 3 · Мощность, спрос лучшего месяца|вводное|Поставщик, график работы, сезон|Физический предел и сезонность
+Шаг 3 · Продажи: средний / запуск / лучший|метрика|Люди × Доля × Ед. × Дней + Онлайн; лучший = мин(спрос; мощность)|Выбрали считать, а не вводить
+Шаг 4 · Оклады, аренда, маркетинг, прочее, CAPEX|вводное|hh.kz, krisha.kz, прайсы, КП|Прямые цены рынка
+Шаг 4 · Полная стоимость сотрудников|метрика|Оклады × 1,11|Взносы работодателя ≈ 11%
+Шаг 4 · OPEX и CAPEX итого|метрика|Σ статей (OPEX + платежи ИП за себя)|Итоги не вводятся
+Шаг 5 · Маржинальная прибыль|метрика|Цена − Себестоимость − Налог (ОУР: без налога)|Вклад одной продажи в OPEX
+Шаг 5 · Точка безубыточности|метрика|OPEX ÷ Маржинальная, вверх (на ОУР без налога)|Сколько продать, чтобы выйти в ноль
+Шаг 5 · Запас прочности, доля мощности|метрика|(Продажи − ТБ) ÷ Продажи; ТБ ÷ Мощность|Норма запаса ≥ 15%
+Шаг 6 · Прибыль запуск / средний / лучший|метрика|Продажи × Маржинальная − OPEX (ОУР: × (1 − 10%), если > 0)|Налог ОУР только с положительной прибыли
+Шаг 7 · Размер скидки, доля повторных покупателей|вводное|Правило курса 10%; допущение команды (позже — CRM)|Предзаполнено, можно менять
+Шаг 7 · Цена со скидкой, падение, нужный рост продаж, загрузка|метрика|Цена×(1−скидка); (Было−Стало)÷Было; Продажи×М÷М со скидкой; Продажи÷Мощность|Проверка «стоит ли давать скидку»
+Шаг 7 · CAC|метрика|Маркетинг ÷ Новые клиенты|Как в лекции: бюджет изменился — CAC пересчитался
+Шаг 7 · LTV, LTV/CAC|метрика|Маржинальная × Ед. в покупке × Покупок на клиента; LTV ÷ CAC|Берём лекционную формулу «чек×покупки×маржа», т.к. срок жизни клиента для товара не измеряется
+Шаг 7 · Маржа, После рекламы|метрика|(Выручка−Прямые)÷Выручка; Выручка−Прямые−Реклама|Из лекции
+Главное · Выручка|метрика|Продажи × Цена|Сумма оплат по плану
+Главное · Новые клиенты|метрика|Оплаты ÷ Покупок на клиента (оплаты = Продажи ÷ Единиц в покупке)|Число оплат считается из продаж
+Главное · Покупок на клиента|метрика|1 + доля повторных покупателей (Покупки ÷ Клиенты)|Считается из вводной, руками не вводится
+Главное · Конверсия|вводное|Допущение команды; после пилота = Оплаты ÷ Заявки|Заявок пока нет, берём оценку, потом факт
+Главное · Доля возвратов|вводное|Пока данных нет, на плитках не показывается; потери на брак уже в себестоимости|Возвраты появятся после первых продаж
+Шаг 8 · Изменения сценариев|вводное|Правило курса −30%/−10%, +20%/+5%|Предзаполнено, можно менять
+Шаг 8 · Сценарные продажи, цена, прибыль, ТБ|метрика|База × (1 + изменение)|Всё остальное как в базе
+Шаг 9 · Месяцев раскачки, резерв|вводное|3 мес; 10% от CAPEX (правило курса)|Предзаполнено, можно менять
+Шаг 9 · Потребность в деньгах|метрика|CAPEX + Месяцы × Убыток запуска + Резерв × CAPEX|Сумма для инвестора или гранта
+KPI: цель, срок, ответственный, качество|вводное|Решение команды|KPI = метрика + цель + срок + ответственный`.split('\n').map(r=>r.split('|'));
+const row=(k,l,u,sc=1)=>`<tr><td>${l}</td><td><input type="number" step="any" data-k="${k}" data-scale="${sc}" value="${+(sget(k)*sc).toFixed(4)}"></td><td>${u}</td><td><input type="text" data-k="src.${k}" placeholder="источник и дата" value="${esc(sget('src.'+k)||'')}"></td></tr>`;
+const tb=(t,rs)=>`<div class="card"><h3>${t}</h3><table><tr><th>Показатель</th><th>Значение</th><th>Ед.</th><th>Источник и дата</th></tr>${rs.map(x=>row(...x)).join('')}</table></div>`;
+const lst=(k,t,qp)=>`<div class="card"><h3>${t} — итого <b id="tot-${k}"></b></h3><table><tr><th>Статья</th>${qp?'<th>Кол-во</th><th>Цена, тг</th>':'<th>тг/мес</th>'}<th>Источник и дата</th><th></th></tr>${p[k].map((x,i)=>`<tr><td><input type="text" data-k="${k}.${i}.n" value="${esc(x.n)}"></td>${qp?`<td><input type="number" step="any" data-k="${k}.${i}.q" value="${x.q}"></td>`:''}<td><input type="number" step="any" data-k="${k}.${i}.p" value="${x.p}"></td><td><input type="text" data-k="${k}.${i}.s" placeholder="источник и дата" value="${esc(x.s)}"></td><td><button data-del="${k}.${i}">✕</button></td></tr>`).join('')}</table><button data-add="${k}">+ добавить статью</button></div>`;
+function dataHTML(){return`<p>Здесь вводятся только <b>вводные</b>. Все метрики считаются формулами на других вкладках.</p>
+${tb('Налоги и общие ставки',[['tax','Ставка налога (упрощёнка, 2–6%)','%',100],['ipn','ИПН на ОУР','%',100],['coef','Коэффициент полной стоимости сотрудника','×',1],['ip','Платежи ИП за себя','тг/мес',1],['days','Дней в месяце','дн',1]])}
+<div class="card"><b>Обоснование налогового режима:</b><textarea rows="2" data-k="why">${esc(p.why)}</textarea></div>
+${tb('Шаг 2. Цена',[['price','Цена одной единицы','тг',1],['upp','Единиц в одной покупке','шт',1]])}${lst('cost','Шаг 2. Себестоимость единицы (количество × цена)',1)}
+${tb('Шаг 3. Продажи',[['flow','Людей в день видят предложение (средний месяц)','шт',1],['conv','Доля, которые покупают','%',100],['onl','Онлайн-продажи в месяц (средний)','шт',1],['lflow','Людей в день (месяц запуска)','шт',1],['lonl','Онлайн-продажи (месяц запуска)','шт',1],['best','Спрос лучшего месяца','шт',1],['cap','Мощность: максимум в месяц','шт',1]])}
+${lst('emp','Шаг 4. Оклады сотрудников (взносы ×1,11 добавятся сами)',0)}${lst('opex','Шаг 4. Постоянные расходы OPEX (без зарплат)',0)}${lst('capex','Шаг 4. Разовые вложения CAPEX (количество × цена)',1)}
+${tb('Шаг 7. Юнит-экономика',[['disc','Размер скидки','%',100],['rep','Доля клиентов, купивших повторно','%',100]])}
+${tb('Шаг 8. Сценарии',[['sp','Пессимистичный: продажи','%',100],['pp','Пессимистичный: цена','%',100],['so','Оптимистичный: продажи','%',100],['po','Оптимистичный: цена','%',100]])}
+${tb('Шаг 9. Деньги на старт',[['mon','Месяцев раскачки','мес',1],['res','Резерв от CAPEX','%',100]])}
+<div class="card"><h3>Факт (или «Загрузить факт»)</h3><table>${[['sales','Продажи пилота, шт'],['pre','Предзаказы, шт'],['survey','Опрос: доля готовых купить, %'],['comp','Реальная цена конкурентов, тг']].map(([k,l])=>`<tr><td>${l}</td><td><input type="number" step="any" data-k="fact.${k}" value="${p.fact[k]??''}"></td></tr>`).join('')}</table></div>
+<div class="card"><h3>Карта данных</h3><table><tr><th>Показатель</th><th>Вводное или метрика</th><th>Источник / формула</th><th>Почему так</th></tr>${MAP.map(r=>`<tr><td>${r[0]}</td><td class="${r[1]=='метрика'?'tg':'ty'}">${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join('')}</table></div>
+<div class="card"><h3>Сверка с учебным примером (нажмите «Загрузить пример»: все строки должны быть ✓)</h3><div id="sv"></div></div>`}
+function sverka(){const n=calc(p,{ds:0,dp:0,dx:0}),a=calc(p,{ds:p.sp,dp:p.pp,dx:0}),c=calc(p,{ds:p.so,dp:p.po,dx:0}),e=1e-6;
+const X=[['Себестоимость единицы, тг',2235,n.cost],['Налог с продажи, тг',240,n.tax],['Маржинальная прибыль, тг',3525,n.m],['Наценка',1.684563758,n.nmark,e],['Маржа',.6275,n.mrg,e],['Продажи: средний месяц',60,n.sales],['Продажи: запуск',24,n.launch],['Продажи: лучший месяц',150,n.best],['OPEX в месяц, тг',136025,n.opex],['CAPEX, тг',141500,n.capex],['ТБ без округления',38.58865248,n.be0,e],['ТБ, шт',39,n.be],['ТБ в день',2,n.day],['ТБ в чеках',39,n.chk],['ТБ в деньгах, тг',234000,n.rev],['Запас прочности',.35,n.safe,e],['Доля мощности для нуля',.195,n.cshare,e],['Прибыль: запуск, тг',-51425,n.lp],['Прибыль: средний, тг',75475,n.ap],['Прибыль: лучший, тг',392725,n.bp],['Цена со скидкой, тг',5400,n.pd],['Маржинальная со скидкой, тг',2949,n.md],['Падение маржинальной',.1634042553,n.drop,e],['Продаж со скидкой, шт',72,n.need],['Рост продаж',.2,n.need/n.sales-1,e],['Загрузка мощности',.3,n.load,e],
+['Сценарии: продажи (песс./оптим.)',42,a.sales],['',72,c.sales],['Сценарии: ТБ песс.',47,a.be],['ТБ оптим.',36,c.be],['Прибыль песс., тг',-12167,a.ap],['Прибыль оптим., тг',138511,c.ap],['Загрузка песс.',.21,a.load,e],['Загрузка оптим.',.36,c.load,e],['Потребность в деньгах: база, тг',309925,n.money],['Прибыль запуска песс., тг',-85892,a.lp],['Потребность в деньгах: песс., тг',413326,a.money]];
+let ok=0;const rs=X.map(([l,x,g,t=.5])=>{const m=Math.abs(x-g)<t;ok+=m;return`<tr><td>${l}</td><td>${fmt(x,4)}</td><td>${fmt(g,4)}</td><td class="${m?'tg':'tr'}">${m?'✓':'✗'}</td></tr>`}).join('');
+return`<p><b>Совпало ${ok} из ${X.length}</b></p><table><tr><th>Показатель</th><th>Ожидаемо (таблица курса)</th><th>Дашборд</th><th></th></tr>${rs}</table>`}
+function dyn(){['cost','emp','opex','capex'].forEach(k=>{const e=$('#tot-'+k);if(e)e.textContent=T(S(p[k]))});$('#sv').innerHTML=sverka()}
+const sget=k=>k.split('.').reduce((o,x)=>o?.[x],p);
+function sset(k,v){const a=k.split('.');let o=p;for(let i=0;i<a.length-1;i++)o=o[a[i]]??={};o[a.at(-1)]=v}
+function show(t,keep){tab=t;const y=scrollY;post=[];$('#pane').innerHTML=t=='data'?dataHTML():V[t]();post.forEach(f=>f());document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==t));if(t=='data')dyn();scrollTo(0,keep?y:0)}
+function updBar(){const rate=sl.t??(p.mode=='our'?p.ipn:p.tax);$('[data-k=mode]').value=p.mode;$('[data-sl=p]').value=sl.p*100;$('[data-sl=s]').value=sl.s*100;$('[data-sl=x]').value=sl.x*100;$('[data-sl=t]').value=rate*100;
+$('#vp').textContent=fmt(sl.p*100)+' %';$('#vs').textContent=fmt(sl.s*100)+' %';$('#vx').textContent=fmt(sl.x*100)+' %';$('#vt').textContent=fmt(rate*100,1)+' %';document.querySelectorAll('[data-sc]').forEach(b=>b.classList.toggle('on',b.dataset.sc==sc))}
+function render(){updBar();tab=='data'?dyn():show(tab,1)}
+const TABS=[['main','Главное'],['price','Цена и точка безубыточности'],['three','Три месяца'],['unit','Юнит-экономика'],['scen','Сценарии'],['kpi','KPI команды'],['data','Данные']];
+$('#nav').innerHTML=TABS.map(([k,l])=>`<button data-t="${k}">${l}</button>`).join('');
+function dl(n,b){const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=n;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),999)}
+const LB={'Налог на упрощённой декларации':'tax','Коэффициент полной стоимости сотрудника':'coef','Платежи ИП за себя':'ip','Дней в месяце для расчёта «в день»':'days','Цена одной единицы':'price','Единиц в одной покупке':'upp','Средний месяц: людей в день видят предложение':'flow','Доля, которые покупают':'conv','Средний месяц: онлайн-продажи в месяц, шт':'onl','Месяц запуска: людей в день':'lflow','Месяц запуска: онлайн-продажи':'lonl','Лучший месяц: спрос':'best','Мощность: максимум в месяц':'cap','Проверка скидкой: размер скидки':'disc','Пессимистичный: изменение «продажи в месяц»':'sp','Пессимистичный: изменение «цена»':'pp','Оптимистичный: изменение «продажи в месяц»':'so','Оптимистичный: изменение «цена»':'po','Месяцев раскачки':'mon','Резерв от CAPEX':'res'};
+function fromX(wb){const n=wb.SheetNames.find(x=>/^\d/.test(x));if(!n){alert('Не нашла вкладку проекта (например «1 Товар»).');return}
+const rows=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:''}),q=Object.assign(START(),{cost:[],emp:[],opex:[],capex:[]});q.src={};let sec='';
+rows.forEach(r=>{const a=String(r[0]).trim(),b=r[1],s=String(r[5]||'').trim();
+if(/^ШАГ 2/.test(a))sec='cost';else if(/^ШАГ 3/.test(a))sec='';else if(/^ШАГ 4\. Расходы: постоянные/.test(a))sec='emp';else if(a=='Полная стоимость сотрудников')sec='opex';else if(/^ИТОГО постоянные/.test(a))sec='';else if(/^ШАГ 4\. Расходы: разовые/.test(a))sec='capex';else if(/^(ИТОГО CAPEX|ШАГ 5)/.test(a))sec='';
+else if(LB[a]&&typeof b=='number'){q[LB[a]]=b;q.src[LB[a]]=s}
+else if(sec&&typeof b=='number'){if(sec=='cost'){if(/^Себестоимость:/.test(a))q.cost.push({n:a.replace(/^Себестоимость:\s*/,''),q:1,p:b,s})}else if(!(sec=='opex'&&a=='Платежи ИП за себя'))q[sec].push({n:a,q:1,p:b,s})}});
+p=q;sl={p:0,s:0,x:0,t:null};sc='base'}
+function readFile(f,cb){const r=new FileReader();r.onload=()=>cb(r.result);r.readAsArrayBuffer(f)}
+$('#f1').onchange=e=>{const f=e.target.files[0];if(!f)return;if(/\.json$/i.test(f.name)){const r=new FileReader();r.onload=()=>{p=Object.assign(START(),JSON.parse(r.result));render();show(tab)};r.readAsText(f)}else readFile(f,b=>{fromX(XLSX.read(b));show(tab);updBar()});e.target.value=''};
+$('#f2').onchange=e=>{const f=e.target.files[0];if(!f)return;readFile(f,b=>{const wb=XLSX.read(b),r=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:''});['sales','pre','survey','comp'].forEach((k,i)=>{const v=r[i+1]?.[2];if(v!==''&&v!=null&&!isNaN(v))p.fact[k]=+v});show(tab)});e.target.value=''};
+document.addEventListener('click',e=>{const t=e.target,d=t.dataset;if(!d)return;
+if(d.t)show(d.t);else if(d.sc){sc=d.sc;render()}
+else if(d.add){d.add=='kpi'?p.kpi.push({n:'',t:'',d:'',o:'',q:''}):p[d.add].push({n:'Новая статья',q:1,p:0,s:''});show(tab,1)}
+else if(d.del){const[k,i]=d.del.split('.');p[k].splice(+i,1);show(tab,1)}
+else if(d.dec){const[i,v]=d.dec.split(':');p.decs[i]=v;show(tab,1)}
+else if(d.a=='load')$('#f1').click();else if(d.a=='fact')$('#f2').click();
+else if(d.a=='save')dl('dashboard-data.json',new Blob([JSON.stringify(p,null,1)],{type:'application/json'}));
+else if(d.a=='tpl'){const n=calc(p,O('base')),ws=XLSX.utils.aoa_to_sheet([['Показатель','План','Факт'],['Продажи пилота, шт',n.sales,''],['Предзаказы, шт',n.launch,''],['Опрос: доля готовых купить, %',p.conv*100,''],['Реальная цена конкурентов, тг',p.price,'']]),wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Факт');XLSX.writeFile(wb,'shablon-fakta.xlsx')}
+else if(d.a=='ex'){p=EX();sl={p:0,s:0,x:0,t:null};sc='base';updBar();show(tab)}
+else if(d.a=='clr'){if(confirm('Очистить все данные?')){p=BLANK();sl={p:0,s:0,x:0,t:null};sc='base';updBar();show(tab)}}
+else if(d.a=='rst'){sl={p:0,s:0,x:0,t:null};sc='base';render()}});
+document.addEventListener('input',e=>{const t=e.target,k=t.dataset.k,s=t.dataset.sl;
+if(t.dataset.fl){const f=t.dataset.fl;fl[f]=f=='ch'?t.value:+t.value;render();return}
+if(s){sl[s]=+t.value/100;if(s=='t')sl.t=+t.value/100;render();return}
+if(!k)return;const v=t.type=='number'?(t.value===''?0:+t.value/(+t.dataset.scale||1)):t.value;sset(k,v);if(k=='mode')sl.t=null;if(!/^(kpi|dec|why|fact|okr)/.test(k))render()});
+document.addEventListener('change',e=>{if(/^okr/.test(e.target.dataset.k||''))show(tab,1)});
+updBar();show('main');
+</script></body></html>
