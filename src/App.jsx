@@ -190,6 +190,8 @@ function AiPage({ data, metrics, toast }) {
     setLoading(true); setError(''); setAnswer('')
     try {
       const response = await fetch('/api/ai/analyze', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ task, context: { product: data.product, audience: data.audience, goal90: data.goal90, price: data.price, unitCost: data.unitCost, taxRate: data.taxRate, monthlyOpex: data.monthlyOpex, monthlyMarketing: data.monthlyMarketing, launchSales: data.launchSales, averageSales: data.averageSales, bestSales: data.bestSales, unitMargin: metrics.unitMargin, breakEvenUnits: metrics.breakEvenUnits, channels: data.channels.map(channel => ({ name: channel.name, budget: channel.monthlyBudget, status: channel.status })) } }) })
+      const contentType = response.headers.get('content-type') || ''
+      if (!contentType.includes('application/json')) throw new Error('На GitHub Pages доступна статическая версия сайта. Чтобы включить ИИ, нужно развернуть сервер и добавить API-ключ.')
       const payload = await response.json()
       if (!response.ok) throw new Error(payload.error || 'Запрос не выполнен')
       setAnswer(payload.answer)

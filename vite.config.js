@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
+  base: process.env.GITHUB_ACTIONS ? '/Finance_dashboard/' : '/',
   server: { proxy: { '/api': 'http://localhost:3001' } },
   test: { environment: 'jsdom', coverage: { include: ['src/domain.js'] } },
 })
